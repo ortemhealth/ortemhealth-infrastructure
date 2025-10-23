@@ -35,3 +35,11 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+# Additional project-specific ignores
+.env
+.env.local
+node_modules
+build
+dist
+.DS_Store
