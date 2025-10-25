@@ -1,4 +1,4 @@
-name: Deploy Backend
+name: Deploy Infrastructure
 on:
   push:
     branches: [ main ]
@@ -7,11 +7,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
         with:
-          node-version: '18'
-      - run: npm install
-      - run: npm run build
-      - name: Deploy to AWS (placeholder)
-        run: echo "Deploying to AWS..."
+          terraform_version: 1.6.0
+      
+      - name: Terraform Init
+        run: |
+          cd terraform
+          terraform init
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      
+      - name: Terraform Validate
+        run: |
+          cd terraform
+          terraform validate
+      
+      - name: Terraform Plan
+        run: |
+          cd terraform
+          terraform plan
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
