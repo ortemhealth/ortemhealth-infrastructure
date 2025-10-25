@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ortemhealth-backend
+  template:
+    metadata:
+      labels:
+        app: ortemhealth-backend
+    spec:
+      containers:
+      - name: backend
+        image: ortemtech/ortemhealth-backend:latest
+        ports:
+        - containerPort: 3000
