@@ -1,0 +1,9 @@
+{
+  "name": "ortemhealth-infrastructure",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "echo 'No tests yet'",
+    "build": "echo 'Infrastructure build complete'"
+  }
+}
