@@ -1,4 +1,4 @@
-name: Infrastructure Validation
+name: Infrastructure CI
 on:
   push:
     branches: [ main ]
@@ -12,19 +12,26 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       
-      - name: Verify structure
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.0
+      
+      - name: Terraform Format Check
         run: |
-          echo "✓ Repository structure validated"
-          ls -la
-          
-      - name: Check Terraform files
+          cd terraform
+          terraform fmt -check
+        continue-on-error: true
+      
+      - name: Terraform Init
         run: |
-          if [ -d "terraform" ]; then
-            echo "✓ Terraform directory exists"
-            ls -la terraform/
-          else
-            echo "⚠ Terraform directory not found (will be added later)"
-          fi
+          cd terraform
+          terraform init -backend=false
+      
+      - name: Terraform Validate
+        run: |
+          cd terraform
+          terraform validate
       
       - name: Success
         run: echo "✓ Infrastructure validation passed"
